@@ -1,0 +1,2469 @@
+{
+  "project": {
+    "name": "Hospital Outpatient Appointment System",
+    "code": "HOAS-2026",
+    "course": "CSE703095 Software Requirements",
+    "university": "Phenikaa University",
+    "group": "Group 05",
+    "language": "English only",
+    "version": "1.0 (case-study baseline – not hospital-approved)",
+    "date": "2026-10-15"
+  },
+  "members": [
+    {
+      "name": "Nguyen Tien Duy",
+      "student_id": "24100284",
+      "focus": "Project introduction; business scenarios; scope and submission guide",
+      "notes": "Chapters 1–2 and business scenarios. Clear, bounded material supported by a checklist."
+    },
+    {
+      "name": "Nguyen Tien Dung",
+      "student_id": "24103269",
+      "focus": "Stakeholder analysis; elicitation; conflict resolution; prioritization",
+      "notes": "Stakeholder needs, elicitation strategies and simulated workshop outcomes."
+    },
+    {
+      "name": "Vuong Nguyen Manh Kien",
+      "student_id": "24100286",
+      "focus": "SRS; functional and quality requirements; use cases; models",
+      "notes": "Requirement specification, measurable acceptance criteria and diagram construction."
+    },
+    {
+      "name": "Phan Manh Quan",
+      "student_id": "24100346",
+      "focus": "V&V; traceability; change control; Python tests and evidence",
+      "notes": "Traceability, test design and execution, impact analysis and coverage metrics."
+    }
+  ],
+  "stakeholders": [
+    {
+      "id": "STK-01",
+      "name": "Patient",
+      "role": "Outpatient",
+      "influence": "High",
+      "interest": "High",
+      "needs": "Search, book, cancel and reschedule visits with understandable notifications",
+      "method": "Simulated interview and walkthrough",
+      "owner": "Nguyen Tien Dung"
+    },
+    {
+      "id": "STK-02",
+      "name": "Receptionist",
+      "role": "Front-desk reception staff",
+      "influence": "High",
+      "interest": "High",
+      "needs": "Accurate check-in; manage late arrivals and exceptional cases",
+      "method": "Simulated interview and observational exercise",
+      "owner": "Nguyen Tien Dung"
+    },
+    {
+      "id": "STK-03",
+      "name": "Doctor",
+      "role": "Physician",
+      "influence": "High",
+      "interest": "High",
+      "needs": "Clear patient queue; update only assigned cases",
+      "method": "Simulated interview and scenario walkthrough",
+      "owner": "Nguyen Tien Dung"
+    },
+    {
+      "id": "STK-04",
+      "name": "Outpatient Manager",
+      "role": "Outpatient department manager",
+      "influence": "High",
+      "interest": "High",
+      "needs": "Prevent overbooking; reporting and appointment policies",
+      "method": "Simulated JAD workshop",
+      "owner": "Nguyen Tien Dung"
+    },
+    {
+      "id": "STK-05",
+      "name": "System Administrator",
+      "role": "IT system administrator",
+      "influence": "High",
+      "interest": "Medium",
+      "needs": "Access control, audit trails and physician schedule updates",
+      "method": "Policy review exercise",
+      "owner": "Nguyen Tien Dung"
+    },
+    {
+      "id": "STK-06",
+      "name": "Information Security Officer",
+      "role": "Information security officer",
+      "influence": "Medium",
+      "interest": "High",
+      "needs": "Authorization, auditability and personal-data protection",
+      "method": "Simulated non-functional-requirements critique",
+      "owner": "Nguyen Tien Dung"
+    }
+  ],
+  "actors": [
+    {
+      "id": "ACT-01",
+      "name": "Patient",
+      "kind": "Primary",
+      "description": "Search, book, review, reschedule and cancel appointments"
+    },
+    {
+      "id": "ACT-02",
+      "name": "Receptionist",
+      "kind": "Primary",
+      "description": "Assist patients and confirm arrival at the reception desk"
+    },
+    {
+      "id": "ACT-03",
+      "name": "Doctor",
+      "kind": "Primary",
+      "description": "View assigned patients and update visit status"
+    },
+    {
+      "id": "ACT-04",
+      "name": "Administrator",
+      "kind": "Primary",
+      "description": "Manage physician schedules and obtain operational reports"
+    },
+    {
+      "id": "ACT-05",
+      "name": "Notification Service",
+      "kind": "External",
+      "description": "Deliver appointment notifications and delivery acknowledgments"
+    }
+  ],
+  "ucs": [
+    {
+      "id": "UC-01",
+      "title": "Register and Sign In",
+      "actor": "Patient",
+      "secondary": "—",
+      "summary": "Register patient identity, authenticate credentials and access the system",
+      "pre": "Network access and valid contact details",
+      "success": "Valid account and authenticated session",
+      "failure": "No session is issued",
+      "steps": [
+        "Choose Register",
+        "Enter the minimum required details",
+        "Validate mandatory fields and uniqueness",
+        "Create an account",
+        "Enter sign-in credentials",
+        "Authenticate credentials and start a role-based session"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Missing required information",
+          "response": "Show required fields; do not create the account"
+        },
+        {
+          "ref": "3b",
+          "condition": "Duplicate telephone number",
+          "response": "Reject the duplicate registration"
+        },
+        {
+          "ref": "6a",
+          "condition": "Incorrect password",
+          "response": "Reject sign-in without disclosing whether the account exists"
+        }
+      ],
+      "nfr": [
+        "NFR-3.1",
+        "NFR-4.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-02",
+      "title": "Manage Patient Profile",
+      "actor": "Patient",
+      "secondary": "—",
+      "summary": "View and update permitted contact information",
+      "pre": "Patient is signed in",
+      "success": "Valid profile changes are saved",
+      "failure": "Previous profile information remains unchanged",
+      "steps": [
+        "Open Profile",
+        "View current personal information",
+        "Edit an allowed address or contact field",
+        "Validate the edited information",
+        "Save changes and display the outcome"
+      ],
+      "extensions": [
+        {
+          "ref": "4a",
+          "condition": "Invalid input format",
+          "response": "Reject the changes and show a validation message"
+        },
+        {
+          "ref": "5a",
+          "condition": "Update failed",
+          "response": "Preserve the previous field values"
+        }
+      ],
+      "nfr": [
+        "NFR-3.1"
+      ],
+      "priority": "Should"
+    },
+    {
+      "id": "UC-03",
+      "title": "Search Doctors and Available Slots",
+      "actor": "Patient",
+      "secondary": "—",
+      "summary": "Find specialties, doctors, dates and available appointment slots",
+      "pre": "Specialty directory and working schedules are configured",
+      "success": "Eligible appointment slots are displayed",
+      "failure": "No appointment record is changed",
+      "steps": [
+        "Open Appointment Search",
+        "Select a specialty",
+        "Choose a doctor and date",
+        "Review slots with remaining capacity",
+        "Select an eligible slot"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Doctor is unavailable",
+          "response": "Exclude unavailable slots from the results"
+        },
+        {
+          "ref": "4a",
+          "condition": "No capacity remains",
+          "response": "Explain that slots are full and suggest another date"
+        }
+      ],
+      "nfr": [
+        "NFR-1.1",
+        "NFR-5.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-04",
+      "title": "Book an Appointment",
+      "actor": "Patient",
+      "secondary": "Notification Service",
+      "summary": "Confirm a slot and create a unique appointment",
+      "pre": "Patient is authenticated and the future slot is open",
+      "success": "Unique appointment ID generated; capacity updated; notification queued",
+      "failure": "No booking is created and no capacity is consumed",
+      "steps": [
+        "Select the slot and review details",
+        "Confirm the booking request",
+        "Recheck the doctor schedule and current capacity",
+        "Atomically create the booking and reserve one place",
+        "Display appointment ID and Confirmed status",
+        "Queue the confirmation notification"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Selected slot filled during confirmation",
+          "response": "Reject booking and request a different slot"
+        },
+        {
+          "ref": "3b",
+          "condition": "Doctor became unavailable",
+          "response": "Reject booking and propose another appointment"
+        },
+        {
+          "ref": "4a",
+          "condition": "Persistence failure",
+          "response": "Roll back the operation without a booking or reserved place"
+        },
+        {
+          "ref": "6a",
+          "condition": "Notification dispatch failed",
+          "response": "Keep the confirmed booking and record an outbox failure"
+        }
+      ],
+      "nfr": [
+        "NFR-2.1",
+        "NFR-4.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-05",
+      "title": "View My Appointments",
+      "actor": "Patient",
+      "secondary": "—",
+      "summary": "View previously booked appointments and their statuses",
+      "pre": "Patient is authenticated",
+      "success": "Only this patient’s appointments appear",
+      "failure": "Other patients’ appointments are never exposed",
+      "steps": [
+        "Sign in",
+        "Open My Appointments",
+        "Filter appointments by authenticated patient",
+        "Display doctor, time and status",
+        "Open an appointment for details"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "No appointments found",
+          "response": "Display an empty state"
+        },
+        {
+          "ref": "3b",
+          "condition": "Another patient’s appointment requested",
+          "response": "Deny access"
+        }
+      ],
+      "nfr": [
+        "NFR-3.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-06",
+      "title": "Cancel an Appointment",
+      "actor": "Patient",
+      "secondary": "Notification Service",
+      "summary": "Cancel an eligible booking and release the reserved place",
+      "pre": "Patient owns a Confirmed appointment",
+      "success": "Appointment is Cancelled and capacity is restored once",
+      "failure": "Appointment remains unchanged",
+      "steps": [
+        "Open a Confirmed appointment",
+        "Select Cancel Appointment",
+        "Validate owner identity and cancellation deadline",
+        "Confirm cancellation",
+        "Atomically cancel the booking and release capacity",
+        "Queue the cancellation notice"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Less than 12 hours remain",
+          "response": "Reject self-service cancellation and refer to reception"
+        },
+        {
+          "ref": "3b",
+          "condition": "Requester does not own the booking",
+          "response": "Reject the request"
+        },
+        {
+          "ref": "5a",
+          "condition": "Booking was already cancelled",
+          "response": "Do not restore the same capacity twice"
+        }
+      ],
+      "nfr": [
+        "NFR-2.1",
+        "NFR-3.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-07",
+      "title": "Reschedule an Appointment",
+      "actor": "Patient",
+      "secondary": "Notification Service",
+      "summary": "Move an appointment to another slot without losing the original booking if anything fails",
+      "pre": "Patient owns a Confirmed booking with at least 12 hours remaining",
+      "success": "Booking uses the new slot; the original slot is released",
+      "failure": "Original appointment and capacity remain intact",
+      "steps": [
+        "Select an appointment to change",
+        "Search for a new slot",
+        "Validate ownership, cutoff and new-slot capacity",
+        "Confirm rescheduling",
+        "Atomically reserve the new slot and release the old slot",
+        "Queue the rescheduling notice"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "New slot has no capacity",
+          "response": "Keep the original appointment"
+        },
+        {
+          "ref": "3b",
+          "condition": "Less than 12 hours remain",
+          "response": "Refer the patient to reception"
+        },
+        {
+          "ref": "5a",
+          "condition": "Failure in the transaction",
+          "response": "Roll back all changes and preserve the original slot"
+        }
+      ],
+      "nfr": [
+        "NFR-2.1",
+        "NFR-3.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-08",
+      "title": "Patient Check-in",
+      "actor": "Receptionist",
+      "secondary": "Patient",
+      "summary": "Confirm a patient’s arrival at the outpatient reception desk",
+      "pre": "Confirmed appointment exists and receptionist is authenticated",
+      "success": "Appointment status becomes Checked-in and the patient enters the queue",
+      "failure": "Original booking status is preserved",
+      "steps": [
+        "Receptionist signs in",
+        "Enter the appointment code",
+        "Display essential booking details",
+        "Verify identity according to hospital procedure",
+        "Confirm arrival",
+        "Set booking status to Checked-in"
+      ],
+      "extensions": [
+        {
+          "ref": "2a",
+          "condition": "Appointment code not found",
+          "response": "Show a not-found message"
+        },
+        {
+          "ref": "5a",
+          "condition": "Appointment was cancelled",
+          "response": "Reject check-in"
+        },
+        {
+          "ref": "6a",
+          "condition": "Patient already checked in",
+          "response": "Do not duplicate check-in"
+        }
+      ],
+      "nfr": [
+        "NFR-3.1",
+        "NFR-6.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-09",
+      "title": "Manage Consultation Progress",
+      "actor": "Doctor",
+      "secondary": "—",
+      "summary": "Allow doctors to review assigned patients and update consultation progress",
+      "pre": "A Checked-in appointment is assigned to the signed-in doctor",
+      "success": "Status moves correctly to In Progress or Completed",
+      "failure": "Appointment remains unchanged",
+      "steps": [
+        "Doctor signs in",
+        "View assigned appointments for today",
+        "Select a Checked-in patient",
+        "Start the consultation",
+        "Change status to In Progress",
+        "Complete the visit and set status to Completed"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Patient has not checked in",
+          "response": "Prevent starting the consultation"
+        },
+        {
+          "ref": "3b",
+          "condition": "Appointment belongs to another doctor",
+          "response": "Deny access"
+        },
+        {
+          "ref": "6a",
+          "condition": "Visit is already completed",
+          "response": "Prevent a duplicate completion"
+        }
+      ],
+      "nfr": [
+        "NFR-3.1",
+        "NFR-6.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-10",
+      "title": "Manage Physician Schedules",
+      "actor": "Administrator",
+      "secondary": "Doctor",
+      "summary": "Add, suspend and adjust work slots, including unexpected absences",
+      "pre": "Administrator is authorized and physician records exist",
+      "success": "Available slots are updated",
+      "failure": "No patient booking is cancelled accidentally",
+      "steps": [
+        "Open Physician Schedule Management",
+        "Select a physician",
+        "Create, change or suspend a slot",
+        "Check overlapping slots and affected bookings",
+        "Save approved changes",
+        "Flag impacted booked visits as Needs Rescheduling"
+      ],
+      "extensions": [
+        {
+          "ref": "4a",
+          "condition": "Work schedule overlaps",
+          "response": "Reject the conflicting slot"
+        },
+        {
+          "ref": "4b",
+          "condition": "Slot contains patient bookings",
+          "response": "Require the affected bookings to be handled"
+        },
+        {
+          "ref": "6a",
+          "condition": "Unexpected physician absence",
+          "response": "Log the change and flag affected bookings for follow-up"
+        }
+      ],
+      "nfr": [
+        "NFR-6.1",
+        "NFR-2.1"
+      ],
+      "priority": "Must"
+    },
+    {
+      "id": "UC-11",
+      "title": "Send Appointment Notifications",
+      "actor": "Notification Service",
+      "secondary": "Patient",
+      "summary": "Process confirmation, cancellation, rescheduling and reminder events",
+      "pre": "A pending notification event exists in the outbox",
+      "success": "Delivery outcome is recorded",
+      "failure": "Appointment status remains unchanged even if delivery fails",
+      "steps": [
+        "HOAS writes an event into the outbox",
+        "Prepare a minimal non-sensitive message",
+        "Send the message through an external provider",
+        "Receive the delivery response",
+        "Store successful or failed delivery status",
+        "Retry failed events under controlled rules"
+      ],
+      "extensions": [
+        {
+          "ref": "3a",
+          "condition": "Notification service is unavailable",
+          "response": "Queue the event for another attempt"
+        },
+        {
+          "ref": "6a",
+          "condition": "Duplicate event delivery",
+          "response": "Use event_id for idempotent processing"
+        }
+      ],
+      "nfr": [
+        "NFR-7.1",
+        "NFR-3.1"
+      ],
+      "priority": "Should"
+    },
+    {
+      "id": "UC-12",
+      "title": "Generate Reports and Review Audit Logs",
+      "actor": "Administrator",
+      "secondary": "—",
+      "summary": "Summarize appointment status and review recorded user actions",
+      "pre": "Administrator is signed in",
+      "success": "Summary and audit history are available",
+      "failure": "Users without privileges are denied access",
+      "steps": [
+        "Administrator signs in",
+        "Request a daily or specialty-specific report",
+        "Aggregate counts by appointment status",
+        "Display counts and report timestamp",
+        "Request an audit record",
+        "Display the related recorded actions"
+      ],
+      "extensions": [
+        {
+          "ref": "2a",
+          "condition": "No records found",
+          "response": "Show zero totals without an error"
+        },
+        {
+          "ref": "5a",
+          "condition": "User lacks required permission",
+          "response": "Deny access"
+        }
+      ],
+      "nfr": [
+        "NFR-6.1",
+        "NFR-3.1"
+      ],
+      "priority": "Should"
+    }
+  ],
+  "fr": [
+    {
+      "id": "FR-1.1.1",
+      "uc": "UC-01",
+      "title": "Unique Patient Registration",
+      "statement": "When a patient submits required account details, the system shall create one patient account if the contact identifier is unique.",
+      "accept": "Accept valid unique registration; do not create a duplicate account",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-01",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-1.1.2",
+      "uc": "UC-01",
+      "title": "Validate Registration Details",
+      "statement": "When patient registration data are incomplete or duplicated, the system shall reject the submission and identify invalid fields.",
+      "accept": "No new account is created with incomplete or duplicate registration details",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-01",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-1.1.3",
+      "uc": "UC-01",
+      "title": "Role-Based Sign-In",
+      "statement": "When an existing user supplies valid credentials, the system shall create an authenticated session for the matching role.",
+      "accept": "Valid credentials create a session; invalid credentials do not",
+      "priority": "Must",
+      "source": "STK-05",
+      "rule": "BR-01",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-2.1.1",
+      "uc": "UC-02",
+      "title": "View Own Profile",
+      "statement": "When a patient views the profile, the system shall display their registered non-sensitive profile fields.",
+      "accept": "Patient A cannot view patient B’s personal profile",
+      "priority": "Should",
+      "source": "STK-01",
+      "rule": "BR-10",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-2.1.2",
+      "uc": "UC-02",
+      "title": "Update Own Profile",
+      "statement": "When a patient edits a permitted profile field, the system shall validate and persist it or preserve the previous value on failure.",
+      "accept": "Valid updates persist; invalid updates preserve original values",
+      "priority": "Should",
+      "source": "STK-01",
+      "rule": "BR-10",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-3.1.1",
+      "uc": "UC-03",
+      "title": "Search by Specialty",
+      "statement": "When a patient selects a specialty, the system shall list doctors assigned to that specialty.",
+      "accept": "Only doctors assigned to the selected specialty are returned",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-02",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-3.1.2",
+      "uc": "UC-03",
+      "title": "Show Available Slots",
+      "statement": "When a date and doctor are selected, the system shall show only non-suspended future appointment slots with remaining capacity.",
+      "accept": "Past, suspended and fully booked slots are excluded",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-02",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-3.1.3",
+      "uc": "UC-03",
+      "title": "Handle Unavailable Schedules",
+      "statement": "If no eligible slot exists for the selected day, the system shall display an empty-result message and permit choosing another date.",
+      "accept": "Show an empty result message without creating a booking",
+      "priority": "Should",
+      "source": "STK-01",
+      "rule": "BR-02",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-4.1.1",
+      "uc": "UC-04",
+      "title": "Create Appointment",
+      "statement": "When a patient confirms an available slot, the system shall create an appointment with a unique ID and status Confirmed.",
+      "accept": "A unique appointment ID and Confirmed status are created",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-03",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-4.1.2",
+      "uc": "UC-04",
+      "title": "Prevent Overbooking",
+      "statement": "While concurrent booking requests compete for a slot, the system shall prevent confirmed bookings from exceeding slot capacity.",
+      "accept": "With capacity = 1, only one of two competing confirmations succeeds",
+      "priority": "Must",
+      "source": "STK-04",
+      "rule": "BR-02",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-4.1.3",
+      "uc": "UC-04",
+      "title": "Reject Ineligible Slot",
+      "statement": "If a slot is unavailable at confirmation time, the system shall reject booking without reducing its remaining capacity.",
+      "accept": "No appointment is created or capacity consumed for an invalid slot",
+      "priority": "Must",
+      "source": "STK-04",
+      "rule": "BR-02",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-5.1.1",
+      "uc": "UC-05",
+      "title": "List My Appointments",
+      "statement": "When an authenticated patient opens My Appointments, the system shall list only appointments owned by that patient.",
+      "accept": "No other patient’s appointment appears in the response",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-10",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-5.1.2",
+      "uc": "UC-05",
+      "title": "Display Appointment Details",
+      "statement": "When a patient opens an owned appointment, the system shall display appointment ID, specialty, doctor, time and status.",
+      "accept": "Appointment ID, specialty, doctor, time and status are displayed",
+      "priority": "Should",
+      "source": "STK-01",
+      "rule": "BR-10",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-6.1.1",
+      "uc": "UC-06",
+      "title": "Cancel Within Allowed Window",
+      "statement": "When an appointment owner cancels at least 12 hours before the visit, the system shall set status Cancelled and release the occupied slot once.",
+      "accept": "Status becomes Cancelled and capacity is released exactly once",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-6.1.2",
+      "uc": "UC-06",
+      "title": "Block Late or Unauthorized Cancellation",
+      "statement": "If cancellation is requested within 12 hours of the visit or the appointment is not owned by the requester, the system shall reject self-service cancellation.",
+      "accept": "Confirmed status and remaining capacity remain unchanged",
+      "priority": "Must",
+      "source": "STK-04",
+      "rule": "BR-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-7.1.1",
+      "uc": "UC-07",
+      "title": "Atomic Appointment Rescheduling",
+      "statement": "When an appointment owner selects an eligible new slot at least 12 hours before the visit, the system shall atomically move the booking to the new slot.",
+      "accept": "Original slot is released and the new slot is reserved exactly once",
+      "priority": "Must",
+      "source": "STK-01",
+      "rule": "BR-05",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-7.1.2",
+      "uc": "UC-07",
+      "title": "Preserve Booking on Rescheduling Failure",
+      "statement": "If a reschedule request fails eligibility or availability checks, the system shall preserve the original appointment and slot allocation.",
+      "accept": "No original booking is lost and no new capacity is consumed",
+      "priority": "Must",
+      "source": "STK-04",
+      "rule": "BR-05",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-8.1.1",
+      "uc": "UC-08",
+      "title": "Validate Reception Check-in",
+      "statement": "When reception staff provide a valid Confirmed appointment ID and verify patient identity, the system shall set the appointment status to Checked-in.",
+      "accept": "Confirmed transitions to Checked-in after identity verification",
+      "priority": "Must",
+      "source": "STK-02",
+      "rule": "BR-06",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-8.1.2",
+      "uc": "UC-08",
+      "title": "Prevent Duplicate Check-in",
+      "statement": "If an appointment is already Checked-in, Cancelled or unknown, the system shall reject an additional check-in without changing the record.",
+      "accept": "A second check-in record is never created",
+      "priority": "Must",
+      "source": "STK-02",
+      "rule": "BR-06",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-9.1.1",
+      "uc": "UC-09",
+      "title": "View Assigned Doctor Queue",
+      "statement": "When an assigned doctor requests their daily queue, the system shall display only appointments for that doctor and day.",
+      "accept": "Doctor can view only assigned appointments",
+      "priority": "Must",
+      "source": "STK-03",
+      "rule": "BR-07",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-9.1.2",
+      "uc": "UC-09",
+      "title": "Start Consultation",
+      "statement": "When an assigned doctor begins a Checked-in appointment, the system shall transition it to In Progress.",
+      "accept": "Only Checked-in appointments can transition to In Progress",
+      "priority": "Must",
+      "source": "STK-03",
+      "rule": "BR-07",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-9.1.3",
+      "uc": "UC-09",
+      "title": "Complete Consultation",
+      "statement": "When an assigned doctor finishes an In Progress appointment, the system shall set status Completed.",
+      "accept": "Only In Progress appointments can transition to Completed",
+      "priority": "Must",
+      "source": "STK-03",
+      "rule": "BR-07",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-10.1.1",
+      "uc": "UC-10",
+      "title": "Prevent Overlapping Physician Slots",
+      "statement": "When an administrator creates a doctor slot, the system shall reject overlapping active slots for that doctor.",
+      "accept": "Overlapping active slots cannot be created for the same doctor",
+      "priority": "Must",
+      "source": "STK-05",
+      "rule": "BR-08",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-10.1.2",
+      "uc": "UC-10",
+      "title": "Handle Unexpected Physician Absence",
+      "statement": "When an administrator suspends a doctor slot with confirmed patients, the system shall flag its affected appointments Needs Rescheduling for staff action.",
+      "accept": "Every affected booking is flagged for staff review",
+      "priority": "Must",
+      "source": "STK-04",
+      "rule": "BR-09",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-10.1.3",
+      "uc": "UC-10",
+      "title": "Audit Schedule Changes",
+      "statement": "When an administrator changes a schedule, the system shall record the actor, time and before/after values in the audit log.",
+      "accept": "Audit entry contains actor, timestamp, previous and new values",
+      "priority": "Must",
+      "source": "STK-06",
+      "rule": "BR-11",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-11.1.1",
+      "uc": "UC-11",
+      "title": "Enqueue Notification Events",
+      "statement": "When an appointment is confirmed, cancelled or rescheduled, the system shall enqueue exactly one logical notification event for that action.",
+      "accept": "One logical event with a unique event ID is created per relevant action",
+      "priority": "Should",
+      "source": "STK-01",
+      "rule": "BR-12",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-11.1.2",
+      "uc": "UC-11",
+      "title": "Preserve Appointment During Notification Failure",
+      "statement": "If a notification provider returns an error, the system shall retain the appointment state and mark the event for a controlled retry.",
+      "accept": "The appointment does not change; failed events are marked for retry",
+      "priority": "Should",
+      "source": "STK-05",
+      "rule": "BR-12",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-12.1.1",
+      "uc": "UC-12",
+      "title": "Count Appointments by Status",
+      "statement": "When an administrator requests a daily summary, the system shall return counts of Confirmed, Checked-in, Completed, Cancelled and No-show appointments.",
+      "accept": "Status totals match the underlying appointment records",
+      "priority": "Should",
+      "source": "STK-04",
+      "rule": "BR-11",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-12.1.2",
+      "uc": "UC-12",
+      "title": "Retrieve Audit Records",
+      "statement": "When an authorized administrator requests an audit record, the system shall display the event actor, action and timestamp.",
+      "accept": "Audit record includes actor, action and timestamp",
+      "priority": "Must",
+      "source": "STK-06",
+      "rule": "BR-11",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    },
+    {
+      "id": "FR-12.1.3",
+      "uc": "UC-12",
+      "title": "Restrict Administrative Reports",
+      "statement": "If a non-administrator requests a restricted report, the system shall deny access without returning the report contents.",
+      "accept": "Unauthorized users receive access denied with no report contents",
+      "priority": "Must",
+      "source": "STK-06",
+      "rule": "BR-10",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien",
+      "method": "Test/Inspection"
+    }
+  ],
+  "nfr": [
+    {
+      "id": "NFR-1.1",
+      "category": "Performance",
+      "statement": "During a load test with 200 concurrent sessions, at least 95% of available-slot searches shall respond within 3 seconds.",
+      "priority": "Must",
+      "verification": "Load test 200 users / 95th percentile",
+      "source": "STK-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-1.2",
+      "category": "Performance",
+      "statement": "At 100 booking requests per minute, at least 95% of confirmations shall finish within 5 seconds.",
+      "priority": "Should",
+      "verification": "Performance test p95",
+      "source": "STK-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-2.1",
+      "category": "Reliability",
+      "statement": "With 100 concurrent requests for a slot with capacity 1, the system shall create no more than one Confirmed booking.",
+      "priority": "Must",
+      "verification": "Concurrency test 100 threads",
+      "source": "STK-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-2.2",
+      "category": "Reliability",
+      "statement": "For 100% of simulated rescheduling transaction failures, the original appointment and its slot allocation shall remain intact.",
+      "priority": "Must",
+      "verification": "Fault-injection tests",
+      "source": "STK-04",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-3.1",
+      "category": "Security",
+      "statement": "Every request to read or modify private bookings shall check ownership or authorized staff role.",
+      "priority": "Must",
+      "verification": "Negative authorization tests",
+      "source": "STK-06",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-3.2",
+      "category": "Security",
+      "statement": "All personal data transmitted through web interfaces shall be protected with TLS version 1.2 or above.",
+      "priority": "Must",
+      "verification": "TLS configuration inspection (not executed)",
+      "source": "STK-06",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-4.1",
+      "category": "Availability",
+      "statement": "Target monthly system availability shall be at least 99.5%, excluding announced maintenance.",
+      "priority": "Should",
+      "verification": "Operational monitoring (not executed)",
+      "source": "STK-05",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-5.1",
+      "category": "Usability",
+      "statement": "In a usability test of ten new users, at least nine shall independently complete a booking within five minutes.",
+      "priority": "Should",
+      "verification": "User study (not executed)",
+      "source": "STK-01",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-6.1",
+      "category": "Auditability",
+      "statement": "Every successful create, cancel, reschedule or physician schedule update shall produce an audit entry.",
+      "priority": "Must",
+      "verification": "Audit log test",
+      "source": "STK-06",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    },
+    {
+      "id": "NFR-7.1",
+      "category": "Resilience",
+      "statement": "When the notification provider fails, all valid Confirmed bookings shall remain and a retryable event shall be stored.",
+      "priority": "Should",
+      "verification": "Notification outage test",
+      "source": "STK-05",
+      "status": "Proposed (case study)",
+      "owner": "Vuong Nguyen Manh Kien"
+    }
+  ],
+  "br": [
+    {
+      "id": "BR-01",
+      "rule": "Contact identifiers must be unique and every authenticated session has an assigned role.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-02",
+      "rule": "A slot is eligible only if it is in the future, active and has booking_count below capacity.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-03",
+      "rule": "A Confirmed appointment can be created only after a final capacity check at commit time.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-04",
+      "rule": "Patients may self-cancel at least 12 hours before the visit; authorized staff handle exceptions.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-05",
+      "rule": "Patients may self-reschedule at least 12 hours before the visit; both slot allocations change atomically.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-06",
+      "rule": "Only a Confirmed appointment may be checked in, and only once.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-07",
+      "rule": "Doctors may view and update only visits assigned to them.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-08",
+      "rule": "Overlapping active time slots may not be configured for the same doctor.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-09",
+      "rule": "An unexpected physician absence flags affected visits as Needs Rescheduling; it does not reassign another doctor automatically.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-10",
+      "rule": "Private appointment information may be read only by the owner or an authorized staff member.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-11",
+      "rule": "Schedule and appointment state changes must be recorded in an audit log.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    },
+    {
+      "id": "BR-12",
+      "rule": "A notification failure must not destroy a booking; every logical event has a unique event_id.",
+      "source": "Stakeholder workshop (simulated)",
+      "status": "Proposed; pending real hospital sign-off"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SC-01",
+      "title": "Successful Appointment Booking",
+      "actor": "Patient",
+      "story": "The patient selects Gastroenterology, a doctor and the available 09:00 slot; a Confirmed appointment with a code is created.",
+      "usecases": "UC-03; UC-04",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-02",
+      "title": "Concurrent Requests for the Last Place",
+      "actor": "2 patients",
+      "story": "Two patients attempt to reserve the same last place; exactly one booking succeeds.",
+      "usecases": "UC-04",
+      "type": "Concurrency"
+    },
+    {
+      "id": "SC-03",
+      "title": "No Appointment Slots Available",
+      "actor": "Patient",
+      "story": "The system reports that no place remains and suggests an alternative date without creating an invalid booking.",
+      "usecases": "UC-03",
+      "type": "Alternate"
+    },
+    {
+      "id": "SC-04",
+      "title": "Cancellation Before the Deadline",
+      "actor": "Patient",
+      "story": "The patient cancels at least 12 hours in advance; exactly one place is released.",
+      "usecases": "UC-06",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-05",
+      "title": "Late Cancellation Attempt",
+      "actor": "Patient",
+      "story": "With only three hours remaining, self-service cancellation is denied and the patient is referred to reception.",
+      "usecases": "UC-06",
+      "type": "Negative"
+    },
+    {
+      "id": "SC-06",
+      "title": "Successful Appointment Rescheduling",
+      "actor": "Patient",
+      "story": "The original slot is released and a new slot reserved within the permitted window without duplicating the booking.",
+      "usecases": "UC-07",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-07",
+      "title": "New Slot Is Full During Rescheduling",
+      "actor": "Patient",
+      "story": "The patient’s original appointment and slot reservation are preserved.",
+      "usecases": "UC-07",
+      "type": "Negative"
+    },
+    {
+      "id": "SC-08",
+      "title": "Patient Arrival and Check-in",
+      "actor": "Receptionist",
+      "story": "Reception verifies the appointment ID and records exactly one successful check-in.",
+      "usecases": "UC-08",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-09",
+      "title": "Unexpected Physician Absence",
+      "actor": "Administrator",
+      "story": "The administrator suspends an affected slot and flags bookings for staff handling.",
+      "usecases": "UC-10",
+      "type": "Exceptional"
+    },
+    {
+      "id": "SC-10",
+      "title": "Patient Arrives Late",
+      "actor": "Receptionist",
+      "story": "An authorized receptionist applies the hospital exception policy without automatically setting Completed status.",
+      "usecases": "UC-08",
+      "type": "Exceptional"
+    },
+    {
+      "id": "SC-11",
+      "title": "Doctor Updates Consultation Progress",
+      "actor": "Doctor",
+      "story": "Appointment status transitions from Checked-in to In Progress to Completed.",
+      "usecases": "UC-09",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-12",
+      "title": "Notification Provider Outage",
+      "actor": "Notification Service",
+      "story": "Confirmed appointment remains unchanged while the system queues an outbox retry.",
+      "usecases": "UC-11",
+      "type": "Failure"
+    },
+    {
+      "id": "SC-13",
+      "title": "Unauthorized Appointment Access",
+      "actor": "Unauthorized user",
+      "story": "A user cannot read another patient’s appointment; denied attempts may be audited.",
+      "usecases": "UC-05; UC-12",
+      "type": "Security"
+    },
+    {
+      "id": "SC-14",
+      "title": "Administrator Reviews Appointment Counts",
+      "actor": "Administrator",
+      "story": "An authorized administrator receives a summary by appointment state.",
+      "usecases": "UC-12",
+      "type": "Positive"
+    },
+    {
+      "id": "SC-15",
+      "title": "Patient Registration and Secure Sign-in",
+      "actor": "Patient",
+      "story": "A new patient registers with complete unique contact information, signs in with valid credentials, and invalid or duplicate submissions are rejected.",
+      "usecases": "UC-01",
+      "type": "Positive/Negative"
+    },
+    {
+      "id": "SC-16",
+      "title": "Patient Views and Updates Own Profile",
+      "actor": "Patient",
+      "story": "An authenticated patient views their own information, updates an address, and cannot save malformed or duplicated contact details.",
+      "usecases": "UC-02",
+      "type": "Positive/Negative"
+    },
+    {
+      "id": "SC-17",
+      "title": "Patient Reviews a Booking and Privacy Boundary",
+      "actor": "Patient",
+      "story": "The owner can list and review appointment details; unrelated patients may not read private bookings.",
+      "usecases": "UC-05",
+      "type": "Positive/Security"
+    },
+    {
+      "id": "SC-18",
+      "title": "Administrator Creates and Audits Physician Slots",
+      "actor": "Administrator",
+      "story": "An administrator creates valid slots, is blocked from configuring overlapping slots for the same physician, and preserves an auditable schedule-change record.",
+      "usecases": "UC-10",
+      "type": "Positive/Negative"
+    }
+  ],
+  "tests": [
+    {
+      "id": "TC-001",
+      "uc": "UC-01",
+      "name": "Valid registration",
+      "kind": "Valid",
+      "requirement": "FR-1.1.1",
+      "related": [
+        "FR-1.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 001, synthetic test data only",
+      "expected": "Patient account is created",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-002",
+      "uc": "UC-01",
+      "name": "Missing date of birth",
+      "kind": "Invalid",
+      "requirement": "FR-1.1.2",
+      "related": [
+        "FR-1.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 002, synthetic test data only",
+      "expected": "Registration is rejected with a missing-field indication",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-003",
+      "uc": "UC-01",
+      "name": "Duplicate phone number",
+      "kind": "Invalid",
+      "requirement": "FR-1.1.2",
+      "related": [
+        "FR-1.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 003, synthetic test data only",
+      "expected": "Duplicate account creation is rejected",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-004",
+      "uc": "UC-01",
+      "name": "Valid sign-in",
+      "kind": "Valid",
+      "requirement": "FR-1.1.3",
+      "related": [
+        "FR-1.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 004, synthetic test data only",
+      "expected": "A session with the correct role is created",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-005",
+      "uc": "UC-01",
+      "name": "Incorrect password",
+      "kind": "Invalid",
+      "requirement": "FR-1.1.3",
+      "related": [
+        "FR-1.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 005, synthetic test data only",
+      "expected": "No session is created",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-006",
+      "uc": "UC-02",
+      "name": "View own profile",
+      "kind": "Valid",
+      "requirement": "FR-2.1.1",
+      "related": [
+        "FR-2.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 006, synthetic test data only",
+      "expected": "Only the authenticated patient’s information is displayed",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-007",
+      "uc": "UC-02",
+      "name": "Update address",
+      "kind": "Valid",
+      "requirement": "FR-2.1.2",
+      "related": [
+        "FR-2.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 007, synthetic test data only",
+      "expected": "New address is saved",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-008",
+      "uc": "UC-02",
+      "name": "Invalid contact information",
+      "kind": "Invalid",
+      "requirement": "FR-2.1.2",
+      "related": [
+        "FR-2.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 008, synthetic test data only",
+      "expected": "Profile is unchanged",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-009",
+      "uc": "UC-03",
+      "name": "Search Gastroenterology",
+      "kind": "Valid",
+      "requirement": "FR-3.1.1",
+      "related": [
+        "FR-3.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 009, synthetic test data only",
+      "expected": "Only doctors in the selected specialty are returned",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-010",
+      "uc": "UC-03",
+      "name": "Available slot has capacity",
+      "kind": "Valid",
+      "requirement": "FR-3.1.2",
+      "related": [
+        "FR-3.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 010, synthetic test data only",
+      "expected": "Remaining capacity is displayed",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_13_visible_slots_filter",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-011",
+      "uc": "UC-03",
+      "name": "Fully booked slot",
+      "kind": "Invalid",
+      "requirement": "FR-3.1.2",
+      "related": [
+        "FR-3.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 011, synthetic test data only",
+      "expected": "Full slot is not shown as eligible",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-012",
+      "uc": "UC-03",
+      "name": "Date with no appointments",
+      "kind": "Alternate",
+      "requirement": "FR-3.1.3",
+      "related": [
+        "FR-3.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 012, synthetic test data only",
+      "expected": "Alternative dates can be selected",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-013",
+      "uc": "UC-04",
+      "name": "Book available slot",
+      "kind": "Valid",
+      "requirement": "FR-4.1.1",
+      "related": [
+        "FR-4.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 013, synthetic test data only",
+      "expected": "One Confirmed booking with a unique code is created",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_01_create_book",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-014",
+      "uc": "UC-04",
+      "name": "Repeated appointment ID",
+      "kind": "Boundary",
+      "requirement": "FR-4.1.1",
+      "related": [
+        "FR-4.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 014, synthetic test data only",
+      "expected": "Appointment IDs do not repeat",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_02_unique_ids",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-015",
+      "uc": "UC-04",
+      "name": "Two patients competing for one place",
+      "kind": "Concurrency",
+      "requirement": "FR-4.1.2",
+      "related": [
+        "FR-4.1.2",
+        "NFR-2.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 015, synthetic test data only",
+      "expected": "Exactly one request succeeds",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_04_parallel_booking",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-016",
+      "uc": "UC-04",
+      "name": "One hundred threads competing for one place",
+      "kind": "Concurrency",
+      "requirement": "FR-4.1.2",
+      "related": [
+        "FR-4.1.2",
+        "NFR-2.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 016, synthetic test data only",
+      "expected": "Capacity is never exceeded",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_04_parallel_booking",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-017",
+      "uc": "UC-04",
+      "name": "Doctor becomes unavailable",
+      "kind": "Invalid",
+      "requirement": "FR-4.1.3",
+      "related": [
+        "FR-4.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 017, synthetic test data only",
+      "expected": "Booking is rejected",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-018",
+      "uc": "UC-04",
+      "name": "Already full slot",
+      "kind": "Invalid",
+      "requirement": "FR-4.1.3",
+      "related": [
+        "FR-4.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 018, synthetic test data only",
+      "expected": "No additional capacity is consumed",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_03_capacity_guard",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-019",
+      "uc": "UC-05",
+      "name": "List own appointments",
+      "kind": "Valid",
+      "requirement": "FR-5.1.1",
+      "related": [
+        "FR-5.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 019, synthetic test data only",
+      "expected": "Only the authenticated patient’s appointments appear",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_17_patient_own_only",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-020",
+      "uc": "UC-05",
+      "name": "Read another patient’s appointment",
+      "kind": "Security",
+      "requirement": "FR-5.1.1",
+      "related": [
+        "FR-5.1.1",
+        "NFR-3.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 020, synthetic test data only",
+      "expected": "Access is denied",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_18_patient_access_control",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-021",
+      "uc": "UC-05",
+      "name": "View booking details",
+      "kind": "Valid",
+      "requirement": "FR-5.1.2",
+      "related": [
+        "FR-5.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 021, synthetic test data only",
+      "expected": "Code, specialty, doctor, time and status are displayed",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-022",
+      "uc": "UC-06",
+      "name": "Cancel more than 24 hours early",
+      "kind": "Valid",
+      "requirement": "FR-6.1.1",
+      "related": [
+        "FR-6.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 022, synthetic test data only",
+      "expected": "Status becomes Cancelled; capacity is restored",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_05_cancellation_returns_slot_once",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-023",
+      "uc": "UC-06",
+      "name": "Cancel exactly 12 hours early",
+      "kind": "Boundary",
+      "requirement": "FR-6.1.1",
+      "related": [
+        "FR-6.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 023, synthetic test data only",
+      "expected": "Cancellation is permitted at the 12-hour boundary",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_09_cancel_at_exact_12h",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-024",
+      "uc": "UC-06",
+      "name": "Cancel only 3 hours early",
+      "kind": "Invalid",
+      "requirement": "FR-6.1.2",
+      "related": [
+        "FR-6.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 024, synthetic test data only",
+      "expected": "Cancellation is rejected and capacity unchanged",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_08_cancel_cutoff",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-025",
+      "uc": "UC-06",
+      "name": "Unauthorized cancellation by another patient",
+      "kind": "Security",
+      "requirement": "FR-6.1.2",
+      "related": [
+        "FR-6.1.2",
+        "NFR-3.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 025, synthetic test data only",
+      "expected": "Unauthorized action is denied",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_07_cancel_not_owner",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-026",
+      "uc": "UC-06",
+      "name": "Repeat cancellation",
+      "kind": "Idempotency",
+      "requirement": "FR-6.1.1",
+      "related": [
+        "FR-6.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 026, synthetic test data only",
+      "expected": "No capacity is released twice",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_06_duplicate_cancellation_rejected",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-027",
+      "uc": "UC-07",
+      "name": "Reschedule with at least 12 hours left",
+      "kind": "Valid",
+      "requirement": "FR-7.1.1",
+      "related": [
+        "FR-7.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 027, synthetic test data only",
+      "expected": "Old slot is released and new slot reserved",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_10_reschedule_ok",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-028",
+      "uc": "UC-07",
+      "name": "Reschedule with only 2 hours left",
+      "kind": "Invalid",
+      "requirement": "FR-7.1.2",
+      "related": [
+        "FR-7.1.2",
+        "NFR-2.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 028, synthetic test data only",
+      "expected": "Original booking remains",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-029",
+      "uc": "UC-07",
+      "name": "Reschedule to a full slot",
+      "kind": "Invalid",
+      "requirement": "FR-7.1.2",
+      "related": [
+        "FR-7.1.2",
+        "NFR-2.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 029, synthetic test data only",
+      "expected": "Original booking remains",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_11_reschedule_full_preserves_old",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-030",
+      "uc": "UC-07",
+      "name": "Mid-transaction rescheduling failure",
+      "kind": "Failure",
+      "requirement": "FR-7.1.2",
+      "related": [
+        "FR-7.1.2",
+        "NFR-2.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 030, synthetic test data only",
+      "expected": "Transaction rolls back with correct capacities",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_12_reschedule_rollback",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-031",
+      "uc": "UC-08",
+      "name": "Check in a Confirmed appointment",
+      "kind": "Valid",
+      "requirement": "FR-8.1.1",
+      "related": [
+        "FR-8.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 031, synthetic test data only",
+      "expected": "Status is Checked-in",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_19_reception_checkin",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-032",
+      "uc": "UC-08",
+      "name": "Check in a Cancelled appointment",
+      "kind": "Invalid",
+      "requirement": "FR-8.1.2",
+      "related": [
+        "FR-8.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 032, synthetic test data only",
+      "expected": "Check-in is denied",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-033",
+      "uc": "UC-08",
+      "name": "Repeated check-in",
+      "kind": "Idempotency",
+      "requirement": "FR-8.1.2",
+      "related": [
+        "FR-8.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 033, synthetic test data only",
+      "expected": "No duplicate check-in is recorded",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_20_checkin_again_rejected",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-034",
+      "uc": "UC-08",
+      "name": "Unknown appointment ID",
+      "kind": "Invalid",
+      "requirement": "FR-8.1.2",
+      "related": [
+        "FR-8.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 034, synthetic test data only",
+      "expected": "Not-found message is displayed",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-035",
+      "uc": "UC-09",
+      "name": "Doctor views assigned list",
+      "kind": "Valid",
+      "requirement": "FR-9.1.1",
+      "related": [
+        "FR-9.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 035, synthetic test data only",
+      "expected": "Only assigned visits are returned",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_35_doctor_queue_only_assigned",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-036",
+      "uc": "UC-09",
+      "name": "Doctor accesses another physician’s list",
+      "kind": "Security",
+      "requirement": "FR-9.1.1",
+      "related": [
+        "FR-9.1.1",
+        "NFR-3.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 036, synthetic test data only",
+      "expected": "Access is denied",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-037",
+      "uc": "UC-09",
+      "name": "Begin consultation in valid status",
+      "kind": "Valid",
+      "requirement": "FR-9.1.2",
+      "related": [
+        "FR-9.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 037, synthetic test data only",
+      "expected": "Status becomes In Progress",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_22_doctor_lifecycle",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-038",
+      "uc": "UC-09",
+      "name": "Begin consultation before check-in",
+      "kind": "Invalid",
+      "requirement": "FR-9.1.2",
+      "related": [
+        "FR-9.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 038, synthetic test data only",
+      "expected": "Transition is rejected",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-039",
+      "uc": "UC-09",
+      "name": "Complete consultation",
+      "kind": "Valid",
+      "requirement": "FR-9.1.3",
+      "related": [
+        "FR-9.1.3"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 039, synthetic test data only",
+      "expected": "Status becomes Completed",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_22_doctor_lifecycle",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-040",
+      "uc": "UC-10",
+      "name": "Create an eligible slot",
+      "kind": "Valid",
+      "requirement": "FR-10.1.1",
+      "related": [
+        "FR-10.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 040, synthetic test data only",
+      "expected": "Slot is created",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_16_no_conflicting_doctor_slots",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-041",
+      "uc": "UC-10",
+      "name": "Create overlapping doctor slot",
+      "kind": "Invalid",
+      "requirement": "FR-10.1.1",
+      "related": [
+        "FR-10.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 041, synthetic test data only",
+      "expected": "Overlapping slot is rejected",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-042",
+      "uc": "UC-10",
+      "name": "Unexpected doctor absence",
+      "kind": "Exceptional",
+      "requirement": "FR-10.1.2",
+      "related": [
+        "FR-10.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 042, synthetic test data only",
+      "expected": "Impacted bookings are flagged",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_15_suspend_marks_affected",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-043",
+      "uc": "UC-10",
+      "name": "Audit physician schedule update",
+      "kind": "Audit",
+      "requirement": "FR-10.1.3",
+      "related": [
+        "FR-10.1.3",
+        "NFR-6.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 043, synthetic test data only",
+      "expected": "Actor, time and before/after values appear",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-044",
+      "uc": "UC-11",
+      "name": "Booking produces an outbox event",
+      "kind": "Valid",
+      "requirement": "FR-11.1.1",
+      "related": [
+        "FR-11.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 044, synthetic test data only",
+      "expected": "Unique notification event is recorded",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_33_cancel_emits_event",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-045",
+      "uc": "UC-11",
+      "name": "Cancellation produces an outbox event",
+      "kind": "Valid",
+      "requirement": "FR-11.1.1",
+      "related": [
+        "FR-11.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 045, synthetic test data only",
+      "expected": "Cancellation event is recorded",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-046",
+      "uc": "UC-11",
+      "name": "Provider fails to deliver a notification",
+      "kind": "Failure",
+      "requirement": "FR-11.1.2",
+      "related": [
+        "FR-11.1.2",
+        "NFR-7.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 046, synthetic test data only",
+      "expected": "Booking remains Confirmed",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_25_outbox_provider_down",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-047",
+      "uc": "UC-11",
+      "name": "Provider retries an event",
+      "kind": "Idempotency",
+      "requirement": "FR-11.1.2",
+      "related": [
+        "FR-11.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 047, synthetic test data only",
+      "expected": "No duplicate logical event is produced",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_26_outbox_retries",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-048",
+      "uc": "UC-12",
+      "name": "Correct appointment status summary",
+      "kind": "Valid",
+      "requirement": "FR-12.1.1",
+      "related": [
+        "FR-12.1.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 048, synthetic test data only",
+      "expected": "Totals match appointment records",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_28_summary_admin",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-049",
+      "uc": "UC-12",
+      "name": "Audit fields are present",
+      "kind": "Valid",
+      "requirement": "FR-12.1.2",
+      "related": [
+        "FR-12.1.2"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 049, synthetic test data only",
+      "expected": "Actor, action and timestamp are present",
+      "actual": "",
+      "status": "Not run (design case)",
+      "execution": "Not run",
+      "owner": "Phan Manh Quan"
+    },
+    {
+      "id": "TC-050",
+      "uc": "UC-12",
+      "name": "Patient requests an administrative report",
+      "kind": "Security",
+      "requirement": "FR-12.1.3",
+      "related": [
+        "FR-12.1.3",
+        "NFR-3.1"
+      ],
+      "precondition": "Required synthetic test fixtures exist and the actor is set up for the scenario",
+      "steps": "1. Prepare the fixture; 2. Perform the action; 3. Check the expected outcome",
+      "input": "Dataset 050, synthetic test data only",
+      "expected": "Access denied",
+      "actual": "Pass in standalone HOAS Python model (not hospital UI)",
+      "status": "Pass (prototype)",
+      "execution": "test_29_summary_denied",
+      "owner": "Phan Manh Quan"
+    }
+  ],
+  "hazards": [
+    {
+      "id": "HZ-01",
+      "title": "Overbooking",
+      "cause": "Two patients same final slot",
+      "severity": "High",
+      "likelihood": "Medium",
+      "risk": "High",
+      "mitigation": "Atomic lock/transaction; capacity guard",
+      "requirement": "FR-4.1.2",
+      "tests": "TC-015; TC-016"
+    },
+    {
+      "id": "HZ-02",
+      "title": "Personal data disclosure",
+      "cause": "Wrong permission checks",
+      "severity": "High",
+      "likelihood": "Medium",
+      "risk": "High",
+      "mitigation": "Owner/role enforcement",
+      "requirement": "NFR-3.1",
+      "tests": "TC-020; TC-036; TC-050"
+    },
+    {
+      "id": "HZ-03",
+      "title": "Wrong check-in",
+      "cause": "Invalid/duplicate code",
+      "severity": "Medium",
+      "likelihood": "Medium",
+      "risk": "Medium",
+      "mitigation": "State guard and identity verification",
+      "requirement": "FR-8.1.2",
+      "tests": "TC-032; TC-033"
+    },
+    {
+      "id": "HZ-04",
+      "title": "Doctor absence unhandled",
+      "cause": "Schedule change ignored",
+      "severity": "High",
+      "likelihood": "Medium",
+      "risk": "High",
+      "mitigation": "Flag impacted bookings, staff action",
+      "requirement": "FR-10.1.2",
+      "tests": "TC-042"
+    },
+    {
+      "id": "HZ-05",
+      "title": "Lost appointment on reschedule",
+      "cause": "Non-atomic slot movement",
+      "severity": "High",
+      "likelihood": "Low",
+      "risk": "Medium",
+      "mitigation": "Rollback + invariants",
+      "requirement": "FR-7.1.2",
+      "tests": "TC-030"
+    },
+    {
+      "id": "HZ-06",
+      "title": "Notification outage",
+      "cause": "External provider down",
+      "severity": "Medium",
+      "likelihood": "High",
+      "risk": "Medium",
+      "mitigation": "Outbox retry",
+      "requirement": "NFR-7.1",
+      "tests": "TC-046"
+    }
+  ],
+  "changes": [
+    {
+      "id": "CR-01",
+      "title": "Change the early draft self-service cancel/reschedule deadline from 24 hours to 12 hours",
+      "stakeholders": "STK-01 ↔ STK-04",
+      "status": "Simulated agreed, pending real approval",
+      "rules": "BR-04; BR-05",
+      "requirements": "FR-6.1.1; FR-6.1.2; FR-7.1.1; FR-7.1.2",
+      "usecases": "UC-06; UC-07",
+      "tests": "TC-023; TC-024; TC-027; TC-028",
+      "impact": "Medium",
+      "date": "2026-10-15",
+      "rationale": "Simulated policy compromise: patient flexibility versus operational disruption"
+    },
+    {
+      "id": "CR-02",
+      "title": "Add atomic booking and rescheduling updates under concurrent requests",
+      "stakeholders": "STK-04 ↔ STK-05",
+      "status": "Simulated agreed, pending real approval",
+      "rules": "BR-02; BR-05",
+      "requirements": "FR-4.1.2; FR-7.1.1; FR-7.1.2; NFR-2.1; NFR-2.2",
+      "usecases": "UC-04; UC-07",
+      "tests": "TC-015; TC-016; TC-027; TC-030",
+      "impact": "High",
+      "date": "2026-10-15",
+      "rationale": "Prevent overbooking and loss of an existing reserved slot"
+    }
+  ],
+  "elicitation": [
+    {
+      "id": "EL-01",
+      "date": "2026-10-08",
+      "technique": "Semi-structured interview (simulated)",
+      "stakeholders": "STK-01; STK-02",
+      "findings": "Patient self-book, reception check-in, cancellation cutoff",
+      "requirements": "FR-1.1.1; FR-8.1.1; BR-04",
+      "owner": "Nguyen Tien Dung",
+      "evidence": "Simulation, not a real hospital interview"
+    },
+    {
+      "id": "EL-02",
+      "date": "2026-10-09",
+      "technique": "Scenario walkthrough (simulated)",
+      "stakeholders": "STK-03; STK-04",
+      "findings": "Doctor absence and overloaded slots",
+      "requirements": "FR-4.1.2; FR-10.1.2",
+      "owner": "Nguyen Tien Dung",
+      "evidence": "Simulation, not an actual meeting"
+    },
+    {
+      "id": "EL-03",
+      "date": "2026-10-10",
+      "technique": "JAD workshop (simulated)",
+      "stakeholders": "STK-01; STK-04; STK-05",
+      "findings": "Compromise cancellation 12h; rollback booking",
+      "requirements": "CR-01; CR-02",
+      "owner": "Nguyen Tien Dung",
+      "evidence": "Simulation, not approved by real stakeholders"
+    },
+    {
+      "id": "EL-04",
+      "date": "2026-10-11",
+      "technique": "Security checklist (simulated)",
+      "stakeholders": "STK-06",
+      "findings": "Owner-only access, audit, TLS target",
+      "requirements": "NFR-3.1; NFR-3.2; NFR-6.1",
+      "owner": "Nguyen Tien Dung",
+      "evidence": "Proposed non-functional targets"
+    }
+  ],
+  "validation": [
+    {
+      "id": "VAL-01",
+      "category": "Ambiguity",
+      "problem": "“Fast booking” has no measurable response-time threshold",
+      "resolution": "Replace with NFR-1.1 95% <=3s at specified load",
+      "status": "Closed in draft",
+      "evidence": "Simulated review"
+    },
+    {
+      "id": "VAL-02",
+      "category": "Conflict",
+      "problem": "Cancellation at any time conflicts with reception operations",
+      "resolution": "Apply 12-hour cutoff and authorized exception",
+      "status": "Closed in draft",
+      "evidence": "Simulated workshop"
+    },
+    {
+      "id": "VAL-03",
+      "category": "Omission",
+      "problem": "A failed reschedule could lose the original place",
+      "resolution": "Add FR-7.1.2 rollback",
+      "status": "Closed in draft",
+      "evidence": "Simulated review"
+    },
+    {
+      "id": "VAL-04",
+      "category": "Security",
+      "problem": "Ownership checks missing for another patient’s bookings",
+      "resolution": "Add owner checks FR-5.1.1/NFR-3.1",
+      "status": "Closed in draft",
+      "evidence": "Simulated review"
+    },
+    {
+      "id": "VAL-05",
+      "category": "Evidence gap",
+      "problem": "Load, TLS and availability targets have not been verified",
+      "resolution": "Record Pending evidence rather than Pass",
+      "status": "Open",
+      "evidence": "Inspection"
+    },
+    {
+      "id": "VAL-06",
+      "category": "Conflict",
+      "problem": "An absent doctor must not be reassigned without patient agreement",
+      "resolution": "Use Needs Rescheduling + staff confirmation",
+      "status": "Closed in draft",
+      "evidence": "Simulated review"
+    }
+  ],
+  "models": [
+    {
+      "id": "M-01",
+      "title": "System Use Case Diagram",
+      "purpose": "Use cases by 5 actors",
+      "links": "UC-01..UC-12",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-02",
+      "title": "Booking Activity Diagram",
+      "purpose": "Check capacity then commit booking",
+      "links": "UC-04",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-03",
+      "title": "Reschedule Activity Diagram",
+      "purpose": "Eligibility, rollback",
+      "links": "UC-07",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-04",
+      "title": "Reception Check-in Activity",
+      "purpose": "Reception guard and status",
+      "links": "UC-08",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-05",
+      "title": "Appointment State Machine",
+      "purpose": "Appointment lifecycle",
+      "links": "UC-04; UC-06; UC-08; UC-09; UC-10",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-06",
+      "title": "DFD Context",
+      "purpose": "External actors, HOAS, notification",
+      "links": "UC-01..UC-12",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-07",
+      "title": "DFD Level 1",
+      "purpose": "Core processes and stores",
+      "links": "UC-01..UC-12",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-08",
+      "title": "Requirement Dependency",
+      "purpose": "Rules, FRs, NFRs, test families",
+      "links": "FR-4.1.2; FR-7.1.2; NFR-2.1",
+      "format": "Graphviz DOT/PNG"
+    },
+    {
+      "id": "M-09",
+      "title": "Hazard Cause Tree",
+      "purpose": "Overbooking and data disclosure",
+      "links": "HZ-01; HZ-02",
+      "format": "Graphviz DOT/PNG"
+    }
+  ]
+}
